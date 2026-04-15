@@ -4,35 +4,74 @@
 
 ## Stage 1：LangChain 核心基础
 
-* [Lesson 01：Hello LangChain](stage01/lesson01.md)
-* [Lesson 02：结构化输出 PydanticOutputParser](stage01/lesson02.md)
-* [项目 1：结构化简历解析器](stage01/project01.md)
+* [01-01 `ChatOpenAI`](stage01/01-01_chatopenai.md)
+* [01-02 `ChatPromptTemplate`](stage01/01-02_chatprompttemplate.md)
+* [01-03 `MessagesPlaceholder`](stage01/01-03_messagesplaceholder.md)
+* [01-04 `Runnable.invoke()`](stage01/01-04_runnable_invoke.md)
+* [01-05 `Runnable.stream()`](stage01/01-05_runnable_stream.md)
+* [01-06 `RunnableParallel`](stage01/01-06_runnableparallel.md)
+* [01-07 `RunnableSequence` 与 `|`](stage01/01-07_runnablesequence.md)
+* [01-08 `StrOutputParser`](stage01/01-08_stroutputparser.md)
+* [01-09 `JsonOutputParser`](stage01/01-09_jsonoutputparser.md)
+* [01-10 `PydanticOutputParser`](stage01/01-10_pydanticoutputparser.md)
+* [01-11 `LangSmithCallbackHandler`](stage01/01-11_langsmith_callback.md)
+* [项目 1：结构化简历解析器](stage01/project01_resume_parser.md)
 
 ## Stage 2：RAG 系统深度开发
 
-* [Lesson 03：Document Loader 与文本切分](stage02/lesson03.md)
-* [Lesson 04：Embedding 与向量数据库](stage02/lesson04.md)
-* [项目 2：企业级智能知识库问答系统](stage02/project02.md)
-* [项目 3：GraphRAG 原型系统](stage02/project03.md)
+* [02-01 Document Loaders](stage02/02-01_document_loaders.md)
+* [02-02 `RecursiveCharacterTextSplitter`](stage02/02-02_recursive_textsplitter.md)
+* [02-03 语义切分对比](stage02/02-03_token_semantic_splitter.md)
+* [02-04 Embedding 模型](stage02/02-04_embeddings.md)
+* [02-05 `Chroma` / `FAISS`](stage02/02-05_chroma_faiss.md)
+* [02-06 `Milvus`](stage02/02-06_milvus.md)
+* [02-07 检索策略](stage02/02-07_search_strategies.md)
+* [02-08 `VectorStoreRetriever`](stage02/02-08_vectorstoreretriever.md)
+* [02-09 `create_retrieval_chain`](stage02/02-09_retrieval_chain.md)
+* [02-10 `MultiQueryRetriever`](stage02/02-10_multiquery_ragfusion.md)
+* [02-11 Re-rank](stage02/02-11_rerank.md)
+* [项目 2：企业级智能知识库问答系统](stage02/project02_knowledge_base.md)
+* [项目 3：GraphRAG 原型系统](stage02/project03_graphrag.md)
 
 ## Stage 3：Agent 智能体开发
 
-* [Lesson 05：Tool Calling 与 ReAct 模式](stage03/lesson05.md)
-* [Lesson 06：Memory 设计](stage03/lesson06.md)
-* [项目 4：智能数据分析助手](stage03/project04.md)
+* [03-01 `@tool`](stage03/03-01_tool_decorator.md)
+* [03-02 `StructuredTool`](stage03/03-02_structured_tool.md)
+* [03-03 Tool Calling 机制](stage03/03-03_tool_calling_mechanism.md)
+* [03-04 `AgentExecutor`](stage03/03-04_agent_executor.md)
+* [03-05 `create_react_agent`](stage03/03-05_react_agent.md)
+* [03-06 `create_openai_functions_agent`](stage03/03-06_openai_functions_agent.md)
+* [03-07 `create_structured_chat_agent`](stage03/03-07_structured_chat_agent.md)
+* [03-08 `ConversationBufferMemory`](stage03/03-08_buffer_memory.md)
+* [03-09 `ConversationSummaryMemory`](stage03/03-09_summary_memory.md)
+* [项目 4：智能数据分析助手](stage03/project04_data_analysis_agent.md)
 
-## Stage 4：多 Agent 协作与 LangGraph
+## Stage 4：LangGraph 多 Agent 工作流
 
-* [Lesson 07：LangGraph 核心概念](stage04/lesson07.md)
-* [项目 5：多 Agent 内容创作工作流](stage04/project05.md)
-* [项目 6：AI 招聘助手（MCP + RAG + Agent）](stage04/project06.md)
+* [04-01 `StateGraph`](stage04/04-01_stategraph.md)
+* [04-02 `Nodes` & `Edges`](stage04/04-02_nodes_edges.md)
+* [04-03 `add_conditional_edges`](stage04/04-03_conditional_edges.md)
+* [04-04 `MemorySaver`](stage04/04-04_persistence.md)
+* [04-05 `Human-in-the-loop`](stage04/04-05_human_in_the_loop.md)
+* [04-06 `Supervisor`](stage04/04-06_supervisor.md)
+* [项目 5：多 Agent 内容创作工作流](stage04/project05_content_workflow.md)
+* [项目 6：AI 招聘助手](stage04/project06_hr_assistant.md)
 
 ## Stage 5：Prompt 工程与 LLMOps
 
-* [Lesson 08：高阶 Prompt 技巧](stage05/lesson08.md)
-* [项目 7：Prompt 评估与 A/B 测试平台](stage05/project07.md)
+* [05-01 CoT](stage05/05-01_cot.md)
+* [05-02 ToT](stage05/05-02_tot.md)
+* [05-03 `Self-Consistency`](stage05/05-03_self_consistency.md)
+* [05-04 Prompt Hub](stage05/05-04_prompt_hub.md)
+* [05-05 `LLM-as-a-Judge`](stage05/05-05_llm_as_judge.md)
+* [项目 7：Prompt 评估与 A/B 测试平台](stage05/project07_prompt_ab_test.md)
 
 ## Stage 6：工程化部署与性能优化
 
-* [Lesson 09：FastAPI + LangServe + Docker](stage06/lesson09.md)
-* [项目 8：LangServe 企业 API 服务平台](stage06/project08.md)
+* [06-01 FastAPI 集成](stage06/06-01_fastapi_integration.md)
+* [06-02 LCEL 高级模式](stage06/06-02_lcel_advanced.md)
+* [06-03 `StreamingResponse` & SSE](stage06/06-03_streaming_sse.md)
+* [06-04 `GPTCache` / `Redis`](stage06/06-04_caching.md)
+* [06-05 `Docker`](stage06/06-05_docker.md)
+* [06-06 `vLLM` / `Ollama`](stage06/06-06_local_llm.md)
+* [项目 8：LangServe 企业 API 服务平台](stage06/project08_enterprise_api.md)
