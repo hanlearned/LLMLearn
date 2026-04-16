@@ -3,25 +3,19 @@
 目标：理解 "Chain" 的核心思想 —— 把 Prompt、模型、解析器串成一条流水线
 """
 
-import os
 from dotenv import load_dotenv
 
-# 加载 .env 文件中的环境变量
+# 加载 .env 文件中的环境变量（仍然需要在入口处加载一次）
 load_dotenv()
 
-from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
+from common.llm_provider import get_llm
 
 # ------------------
-# 1. 配置模型（DeepSeek）
+# 1. 获取已封装好的 LLM 单例
 # ------------------
-llm = ChatOpenAI(
-    model="deepseek-chat",
-    api_key=os.getenv("DEEPSEEK_API_KEY"),
-    base_url="https://api.deepseek.com/v1",
-    temperature=0.7,
-)
+llm = get_llm()
 
 # ------------------
 # 2. 构建 Prompt
@@ -55,9 +49,9 @@ chain = prompt | llm | parser
 if __name__ == "__main__":
     concept = "LangChain"
     style = "给大学生讲课"
-    print(f"🤖 正在向 AI 提问：请用「{style}」的风格解释什么是 {concept}\n")
+    print(f"正在向 AI 提问：请用「{style}」的风格解释什么是 {concept}\n")
 
     response = chain.invoke({"concept": concept, "style": style})
 
-    print("📝 AI 的回答：")
+    print("AI 的回答：")
     print(response)
