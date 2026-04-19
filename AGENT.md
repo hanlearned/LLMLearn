@@ -27,23 +27,30 @@
 - [x] 完善 `01-02_chatprompttemplate.md`
   - 为每个代码示例补充"本质在干什么"的逐行解释
 - [x] 编写 `README.md`，汇总项目介绍、在线文档地址、快速开始指南
+- [x] 完成 **项目 1：结构化简历解析器**：`stage01_basics/project01_resume_parser.py`
+  - 用嵌套 Pydantic Schema 从非结构化简历文本中提取结构化数据
+- [x] 新增 `docs/stage01/01-10_pydantic_output_parser.md`
+  - 含 Markdown 代码块清洗能力溯源（`parse_json_markdown`，LangChain 0.0.x 起即存在）
+- [x] 新增 `docs/stage01/01-05_runnable_stream.md` + `03_runnable_stream.py`
+  - 流式输出原理、`stream=true` 底层机制、Chunk 形态
+- [x] 新增 `docs/stage01/01-04_runnable_invoke.md`
+  - `invoke()` 本质、`config` 参数、异常处理、`invoke` vs `batch` vs `stream`
 
 ### 当前卡点
-无。API 已通，基础组件（Prompt → LLM → Parser 链式组合）已掌握。
+无。API 已通，基础组件（Prompt → LLM → Parser 链式组合）已掌握，项目 1 已跑通。
 
 ---
 
 ## 🚀 下一步行动（Next Step）
 
-### 二选一：
-**A. 项目驱动（推荐）**
-- 直接进入 **项目 1：结构化简历解析器**
-- 把 `PydanticOutputParser` 和 `get_llm()` 封装用在真实场景：输入非结构化简历文本 → 输出带类型的 `Resume` 对象
-
-**B. 继续补 Stage 1 剩余基础**
-- `Runnable.stream()`：流式输出与 SSE 基础
+### 继续补 Stage 1 剩余基础
+- `MessagesPlaceholder`：动态消息列表占位（Agent/Memory 前置知识）
 - `RunnableParallel`：并行执行多个子任务
-- `MessagesPlaceholder`：动态消息列表占位
+- `StrOutputParser` / `JsonOutputParser`：独立文档
+- `LangSmithCallbackHandler`：调用链路追踪
+
+### 或进入 Stage 2
+- 完成 Stage 1 后，进入 **RAG 系统深度开发**
 
 ---
 
