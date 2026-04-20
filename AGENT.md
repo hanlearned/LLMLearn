@@ -22,6 +22,12 @@
   - 用 `__new__` 实现全局唯一实例，后续所有程序统一通过 `get_llm()` 获取模型
 - [x] 完成 `PydanticOutputParser` 最小示例：`stage01_basics/02_pydantic_output_parser.py`
   - 强制 AI 按 JSON Schema 输出结构化数据，并自动校验字段类型
+- [x] 完成 `MessagesPlaceholder` 最小示例：`stage01_basics/04_messagesplaceholder.py`
+  - 动态消息列表占位，Agent/Memory 前置知识
+- [x] 新增技术文档：`docs/stage01/01-03_messagesplaceholder.md`
+- [x] 完成 `RunnableParallel` 最小示例：`stage01_basics/05_runnable_parallel.py`
+  - 一份输入同时分发给多个 Runnable，掌握串并联组合
+- [x] 新增技术文档：`docs/stage01/01-06_runnable_parallel.md`
 - [x] 新增技术文档：`docs/stage01/01-07_runnablesequence.md`
   - 讲清楚 `prompt | llm | parser` 的管道语法本质、执行顺序与内部实现
 - [x] 完善 `01-02_chatprompttemplate.md`
@@ -44,8 +50,6 @@
 ## 🚀 下一步行动（Next Step）
 
 ### 继续补 Stage 1 剩余基础
-- `MessagesPlaceholder`：动态消息列表占位（Agent/Memory 前置知识）
-- `RunnableParallel`：并行执行多个子任务
 - `StrOutputParser` / `JsonOutputParser`：独立文档
 - `LangSmithCallbackHandler`：调用链路追踪
 
