@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 import config  # noqa: E402
+import common.sqlite_compat  # noqa: F401  # 老系统 sqlite 兼容，须在 chromadb 之前
 from langchain_chroma import Chroma
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains import create_retrieval_chain

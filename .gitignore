@@ -47,6 +47,7 @@ chroma_db/
 *.db
 .langgraph_api/
 .cache/
+.pytest_cache/
 
 # OS
 .DS_Store

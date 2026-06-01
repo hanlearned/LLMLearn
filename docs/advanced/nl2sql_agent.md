@@ -60,26 +60,31 @@ Agent（ReAct 模式）天然解决前两点：它能**多步**地「先看表 �
 
 ### 2.2 重点一：只读护栏（Read-only Guardrail）
 
-让模型生成的 SQL 直连数据库，最大的风险是**写操作**（删表、改数据）。我们用**双层防御**：
+让模型生成的 SQL 直连数据库，最大的风险是**写操作**（删表、改数据）。我们用**三层防御**（defense in depth）：
 
 ```python
-# 第 1 层：必须以 SELECT 或 WITH（CTE 也是只读）开头
+# 第 1 层：拒绝多语句，挡 `SELECT 1; DROP TABLE x` 这种拖尾注入
+if ";" in cleaned:               # 已 rstrip 掉结尾分号；正文里还有分号=多条语句
+    return "拒绝执行：检测到多条语句……"
+
+# 第 2 层：必须以 SELECT 或 WITH（CTE 也是只读）开头
 head = cleaned.lstrip("(").lstrip()
 if not re.match(r"(?i)^(SELECT|WITH)\b", head):
     return "拒绝执行：只允许 SELECT 查询……"
 
-# 第 2 层：全句扫描写操作关键字黑名单
-hit = _FORBIDDEN_RE.search(cleaned)   # INSERT/UPDATE/DELETE/DROP/ALTER/CREATE/...
-if hit:
-    return f"拒绝执行：检测到写操作关键字 '{hit.group(1)}'……"
+# 第 3 层（最硬）：用只读连接执行，写操作会在 DB 层直接失败
+conn = sqlite3.connect(f"file:{DB_PATH}?mode=ro", uri=True)
 ```
 
-设计取舍：白名单（开头必须 SELECT/WITH）+ 黑名单（禁写关键字）双管齐下，单靠开头判断挡不住
-`SELECT ...; DROP TABLE ...` 这种「拖尾注入」；用词边界 `\b` 匹配避免误杀含关键字字母的列名
-（如 `created_at` 不会被当成 `CREATE`）；拒绝时返回「人话」而非抛异常，模型看到提示会自己改写。
+**设计取舍**：早期版本用「写操作关键字黑名单」（扫描 INSERT/UPDATE/DELETE…），但它有个隐蔽 bug——
+`SELECT REPLACE(name,'张','李')` 里的 `REPLACE` 是**只读标量函数**，却会被黑名单误杀。
+所以升级为「单语句 + SELECT/WITH 开头 + **只读连接**」：
+- 多语句被第 1 层挡掉，所以单条语句即便含写关键字也越不出 SELECT 的范围；
+- 真正的兜底是第 3 层的**只读连接**（`mode=ro`）——即使前两层都被绕过，SQLite 也会对任何写操作抛
+  `attempt to write a readonly database`，从**权限层**根除风险。这比纯文本过滤可靠得多。
 
-> 生产加固方向（文末复盘展开）：除了关键字过滤，更稳的是**用只读数据库账号 / 只读连接**，
-> 从权限层面根除写操作，关键字过滤只作为第一道闸。
+> 这套护栏有对应的单元测试（`tests/test_nl2sql.py`）：参数化覆盖「只读函数应放行 / 写操作应拒绝 /
+> 多语句应拒绝 / 只读连接 DB 层兜底」，改动护栏后跑一遍就知道有没有破坏安全性。
 
 ### 2.3 重点二：错误自愈（Self-healing）
 

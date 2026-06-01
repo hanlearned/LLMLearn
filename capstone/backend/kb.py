@@ -3,6 +3,7 @@
 import config
 from langchain_community.document_loaders import TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+import common.sqlite_compat  # noqa: F401  # 老系统 sqlite 兼容，须在 chromadb 之前
 from langchain_chroma import Chroma
 
 from common.embeddings_provider import get_embeddings

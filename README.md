@@ -111,6 +111,26 @@ SILICONFLOW_API_KEY=sk-xxxxxxxx
 python stage01_basics/01_hello_langchain.py
 ```
 
+> **老系统 sqlite 报错？** 若运行 RAG 项目时遇到 `chromadb requires sqlite3 >= 3.35`，
+> 装一下 `pysqlite3-binary`（已在 requirements 中，Linux 自动安装），仓库会通过
+> `common/sqlite_compat.py` 自动顶替，无需改动系统。
+
+---
+
+## 🧪 验证与测试
+
+本仓库的非 LLM 逻辑（SQL 只读护栏、退款 HITL 决策、路由、RAG 管道、各服务健康检查等）
+都有 `pytest` 覆盖，**无需 API Key 即可运行**：
+
+```bash
+pip install -r requirements.txt -r requirements-dev.txt
+python -m pytest tests/ -q
+```
+
+- 测试用「假 Key + 确定性假 Embedding」验证编排逻辑，不消耗额度、不联网。
+- 真正的模型问答需要配好 `.env` 后直接运行各项目脚本体验。
+- 已实跑验证：建库、所有 LangGraph 图编译、3 个 FastAPI 服务 `/health`、SQL 护栏（含只读连接 DB 层兜底）。
+
 ---
 
 ## 🛠️ 技术栈

@@ -38,23 +38,19 @@ DB_PATH = pathlib.Path(__file__).parent / "shop.db"
 # 一次查询最多返回多少行——防止「SELECT *」把上万行塞进上下文，既费 token 又拖慢响应
 MAX_ROWS = 50
 
-# 写操作关键字黑名单：只要 SQL 里出现这些「语句开头动词」，就判定为写操作并拒绝。
-# 用「词边界 \b」匹配，避免把列名里恰好含这些字母的情况误杀（如 created_at 不含完整 CREATE 词）。
-_FORBIDDEN = (
-    "INSERT", "UPDATE", "DELETE", "DROP", "ALTER", "CREATE",
-    "REPLACE", "TRUNCATE", "ATTACH", "DETACH", "PRAGMA", "VACUUM",
-    "GRANT", "REVOKE",
-)
-_FORBIDDEN_RE = re.compile(r"\b(" + "|".join(_FORBIDDEN) + r")\b", re.IGNORECASE)
 
-
-def _connect() -> sqlite3.Connection:
-    """打开数据库连接。库不存在时给出清晰指引，而不是抛底层异常。"""
+def _connect(read_only: bool = True) -> sqlite3.Connection:
+    """打开数据库连接。默认**只读**——这是最硬的护栏：即便有写语句漏过文本检查，
+    数据库层也会直接拒绝写入。库不存在时给出清晰指引，而不是抛底层异常。"""
     if not DB_PATH.exists():
         raise FileNotFoundError(
             f"找不到数据库 {DB_PATH}，请先运行：python projects_advanced/nl2sql_agent/seed_db.py"
         )
-    conn = sqlite3.connect(DB_PATH)
+    if read_only:
+        # file: URI + mode=ro 打开只读连接，任何 INSERT/UPDATE/DELETE 都会在 DB 层报错
+        conn = sqlite3.connect(f"file:{DB_PATH}?mode=ro", uri=True)
+    else:
+        conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row  # 让查询结果能按列名访问，便于格式化
     return conn
 
@@ -122,21 +118,19 @@ def run_sql(sql: str) -> str:
     """
     cleaned = sql.strip().rstrip(";").strip()
 
-    # --- 只读护栏 1：必须以 SELECT 或 WITH（CTE 也是只读查询）开头 ---
+    # --- 护栏 1：拒绝多语句（防 `SELECT 1; DELETE ...` 这类拖尾注入）---
+    # rstrip 掉结尾分号后，正文里若还有分号，说明是多条语句拼接，直接拒绝。
+    if ";" in cleaned:
+        return "拒绝执行：检测到多条语句（包含分号），只允许单条只读 SELECT 查询。"
+
+    # --- 护栏 2：必须以 SELECT 或 WITH（CTE 也是只读查询）开头 ---
     head = cleaned.lstrip("(").lstrip()  # 兼容 (SELECT ...) 这种带括号的写法
     if not re.match(r"(?i)^(SELECT|WITH)\b", head):
         return "拒绝执行：只允许 SELECT 查询，请改写为只读的 SELECT 语句。"
 
-    # --- 只读护栏 2：扫描全句，命中写操作关键字一律拒绝 ---
-    hit = _FORBIDDEN_RE.search(cleaned)
-    if hit:
-        return (
-            f"拒绝执行：检测到写操作关键字 '{hit.group(1).upper()}'，本工具只读，"
-            f"不允许任何修改数据或表结构的语句。"
-        )
-
-    # --- 执行查询；出错则把真实报错返回给模型，供其自愈重写 ---
-    conn = _connect()
+    # --- 护栏 3（最硬）：用只读连接执行；即便上面没拦住，写操作也会在 DB 层失败 ---
+    # 注意：这样 REPLACE()/IIF() 等只读标量函数能正常用，不会被关键字黑名单误杀。
+    conn = _connect(read_only=True)
     try:
         cur = conn.execute(cleaned)
         rows = cur.fetchmany(MAX_ROWS + 1)  # 多取一行用于判断是否被截断

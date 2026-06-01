@@ -16,6 +16,7 @@ pydantic>=2.7.0
 langchain-text-splitters>=0.3.0
 chromadb>=0.5.0              # 本地向量库（默认）
 langchain-chroma>=0.1.4    # Chroma 的现代 LangChain 集成
+pysqlite3-binary; platform_system == "Linux"   # 老系统 sqlite<3.35 时 chromadb 需要它顶替（见 common/sqlite_compat.py）
 faiss-cpu>=1.8.0            # 备选向量库
 tiktoken>=0.7.0            # token 计数 / 切分
 rank-bm25>=0.2.2          # 关键词检索（混合检索）
