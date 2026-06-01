@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>云启智能客服 · Capstone</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; background: #f0f2f5; height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .app { width: 480px; height: 92vh; background: #fff; border-radius: 14px; box-shadow: 0 8px 30px rgba(0,0,0,.12); display: flex; flex-direction: column; overflow: hidden; }
+    .header { background: linear-gradient(135deg,#4f6df5,#7c4ff5); color: #fff; padding: 16px 20px; }
+    .header h1 { font-size: 17px; } .header p { font-size: 12px; opacity: .85; margin-top: 3px; }
+    .chat { flex: 1; overflow-y: auto; padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+    .msg { max-width: 80%; padding: 10px 14px; border-radius: 12px; line-height: 1.5; font-size: 14px; white-space: pre-wrap; word-break: break-word; }
+    .user { align-self: flex-end; background: #4f6df5; color: #fff; border-bottom-right-radius: 3px; }
+    .bot { align-self: flex-start; background: #f0f2f5; color: #222; border-bottom-left-radius: 3px; }
+    .approve-box { align-self: flex-start; background: #fff7e6; border: 1px solid #ffd591; border-radius: 12px; padding: 12px 14px; font-size: 13px; }
+    .approve-box .btns { margin-top: 8px; display: flex; gap: 8px; }
+    .approve-box button { border: none; border-radius: 7px; padding: 6px 16px; cursor: pointer; font-size: 13px; }
+    .btn-ok { background: #52c41a; color: #fff; } .btn-no { background: #ff4d4f; color: #fff; }
+    .input-bar { display: flex; padding: 12px; border-top: 1px solid #eee; gap: 8px; }
+    .input-bar input { flex: 1; border: 1px solid #ddd; border-radius: 9px; padding: 10px 12px; font-size: 14px; outline: none; }
+    .input-bar input:focus { border-color: #4f6df5; }
+    .input-bar button { background: #4f6df5; color: #fff; border: none; border-radius: 9px; padding: 0 18px; cursor: pointer; font-size: 14px; }
+    .input-bar button:disabled { opacity: .5; cursor: not-allowed; }
+    .hint { font-size: 11px; color: #999; padding: 0 12px 8px; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <h1>🤖 云启智能客服</h1>
+      <p>多 Agent · RAG 政策问答 · 订单查询 · 退款需人工审批</p>
+    </div>
+    <div class="chat" id="chat">
+      <div class="msg bot">您好！我是云启商城智能客服，可以帮您查政策、查订单、办退款。试试问我「退货政策是什么」或「订单 10001 想退款」。</div>
+    </div>
+    <div class="hint">演示订单号：10001 / 10002 / 10003</div>
+    <div class="input-bar">
+      <input id="text" placeholder="输入消息…" autocomplete="off" />
+      <button id="send">发送</button>
+    </div>
+  </div>
+
+  <script>
+    // 每个浏览器会话生成一个 session_id，用于后端按 thread_id 隔离记忆
+    const SESSION = "web-" + Math.random().toString(36).slice(2, 9);
+    const chat = document.getElementById("chat");
+    const input = document.getElementById("text");
+    const sendBtn = document.getElementById("send");
+
+    function addMsg(text, cls) {
+      const div = document.createElement("div");
+      div.className = "msg " + cls;
+      div.textContent = text;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+      return div;
+    }
+
+    function addApprovalBox(refundText) {
+      const box = document.createElement("div");
+      box.className = "approve-box";
+      box.innerHTML = `<div>⚠️ ${refundText}</div><div class="btns">
+        <button class="btn-ok">批准退款</button><button class="btn-no">拒绝</button></div>`;
+      chat.appendChild(box);
+      chat.scrollTop = chat.scrollHeight;
+      box.querySelector(".btn-ok").onclick = () => decide(box, true);
+      box.querySelector(".btn-no").onclick = () => decide(box, false);
+    }
+
+    async function decide(box, approve) {
+      box.remove();
+      const r = await fetch("/api/approve", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ session_id: SESSION, approve })
+      });
+      const data = await r.json();
+      addMsg(data.answer, "bot");
+    }
+
+    async function send() {
+      const text = input.value.trim();
+      if (!text) return;
+      addMsg(text, "user");
+      input.value = "";
+      sendBtn.disabled = true;
+      const typing = addMsg("正在思考…", "bot");
+      try {
+        const r = await fetch("/api/chat", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ session_id: SESSION, message: text })
+        });
+        const data = await r.json();
+        typing.textContent = data.answer;
+        if (data.needs_approval) addApprovalBox(data.answer);
+      } catch (e) {
+        typing.textContent = "❌ 请求失败：" + e;
+      } finally {
+        sendBtn.disabled = false;
+        input.focus();
+      }
+    }
+
+    sendBtn.onclick = send;
+    input.addEventListener("keydown", e => { if (e.key === "Enter") send(); });
+    input.focus();
+  </script>
+</body>
+</html>

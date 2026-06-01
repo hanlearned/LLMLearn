@@ -29,6 +29,20 @@
 
 > **本路线相比通用教程的三处刻意取舍**：① Agent 一律用 **LangGraph** 实现，`AgentExecutor` 只讲原理不依赖（它已软弃用）；② **评测/可观测** 从 Stage 2 就渗透，不是放到最后；③ **工程化（FastAPI）** 从项目 2 起每个项目都带一层，而非攒到结尾。详见 [总纲](docs/roadmap.md)。
 
+### 🔥 进阶实战项目（贴近真实岗位，`projects_advanced/`）
+
+在 8 个阶段项目之外，额外提供 3 个更硬核、更接近真实工作的项目：
+
+| 项目 | 能力点 | 代码 |
+| :--- | :--- | :--- |
+| NL2SQL 数据问答 Agent | 接真实 SQLite 库 + 只读护栏 + SQL 错误自愈 | `projects_advanced/nl2sql_agent/` |
+| Agent 自动化评测系统 | LLMOps：多维 LLM-Judge + 报告生成 | `projects_advanced/agent_eval_system/` |
+| 深度研究 Agent | 规划→联网检索→带引用综述（LangGraph 显式编排） | `projects_advanced/research_agent/` |
+
+### 🎓 全栈毕业大项目（`capstone/`）
+
+一个前后端齐全、可一键部署的**智能客服系统**：Supervisor 多 Agent 路由 + RAG 政策问答 + 订单工具 + **退款人工审批（HITL）** + SqliteSaver 持久记忆 + 原生 JS 聊天前端 + 评测看板 + Docker/compose。运行 `python capstone/backend/api.py` 后打开 `http://127.0.0.1:8000/`。
+
 ---
 
 ## 📁 项目目录结构

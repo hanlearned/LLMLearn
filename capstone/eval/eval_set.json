@@ -1,0 +1,8 @@
+[
+  {"question": "你们的退货政策是什么？生鲜能退吗？", "reference": "支持7天无理由退货，但生鲜、定制类商品不支持无理由退货。", "expect_route": "policy"},
+  {"question": "黑金会员有什么权益？", "reference": "全场95折、专属客服、生日礼券、每月5次免运费，年费199元。", "expect_route": "policy"},
+  {"question": "退款一般多久到账？", "reference": "退货签收后3个工作日内原路退回，到账1-7天。", "expect_route": "policy"},
+  {"question": "订单 10001 现在到哪了？", "reference": "订单10001是蓝牙耳机，状态已签收。", "expect_route": "order"},
+  {"question": "帮我查下订单 10003 的物流", "reference": "订单10003机械键盘，运输中，中通快递，预计后天送达。", "expect_route": "order"},
+  {"question": "可以开发票吗？", "reference": "支持电子普通发票和增值税专用发票，订单完成后30天内申请。", "expect_route": "policy"}
+]

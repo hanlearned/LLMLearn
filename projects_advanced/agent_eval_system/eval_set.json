@@ -1,0 +1,52 @@
+[
+  {
+    "question": "LangChain 中 LCEL 是什么？它解决了什么问题？",
+    "reference": "LCEL（LangChain Expression Language）是一种用 | 管道符把 Prompt、Model、Parser 等组件串成 Runnable 链的声明式表达式语言；它统一了 invoke/stream/batch/ainvoke 等调用接口，原生支持流式、并行、异步与重试，降低了编排样板代码。",
+    "context": "LCEL 让 prompt | llm | parser 这样的链具备统一的 Runnable 协议。"
+  },
+  {
+    "question": "RAG 的全称是什么？它的核心两步流程是怎样的？",
+    "reference": "RAG 全称 Retrieval-Augmented Generation（检索增强生成）。核心两步：先用检索器（Retriever）根据问题从向量库/知识库召回相关文档（Retrieval），再把召回内容作为上下文拼进 Prompt 交给 LLM 生成答案（Generation）。",
+    "context": "RAG 通过外部知识缓解大模型幻觉与知识过时问题。"
+  },
+  {
+    "question": "在 LangChain 0.3 中，把链的输出强制解析成 Pydantic 结构化对象，推荐用哪个方法？",
+    "reference": "推荐使用模型对象的 with_structured_output(SchemaClass) 方法，传入一个 Pydantic 模型类，模型会借助 function/tool calling 直接返回符合该 schema 的对象；相比手写 PydanticOutputParser 更稳健，无需在 prompt 里塞格式说明。",
+    "context": "with_structured_output 内部依赖底层模型的 tool calling 能力。"
+  },
+  {
+    "question": "向量检索里的 Embedding（嵌入）起什么作用？",
+    "reference": "Embedding 把文本映射为高维稠密向量，使语义相近的文本在向量空间中距离相近；检索时把问题也嵌入成向量，通过余弦相似度等度量找出最相近的文档，从而实现基于语义而非关键词的匹配。",
+    "context": "相同维度的向量之间可以用余弦相似度衡量语义接近程度。"
+  },
+  {
+    "question": "ReAct 这种 Agent 范式的核心循环是什么？",
+    "reference": "ReAct = Reasoning + Acting。核心是一个 思考(Thought)->行动(Action，即调用工具)->观察(Observation，工具返回)->再思考 的循环，模型在循环中自主决定调用哪个工具、何时停止，直到产出最终答案。",
+    "context": "ReAct 让模型把推理与工具调用交织进行。"
+  },
+  {
+    "question": "LangGraph 相比传统链（Chain）最大的优势是什么？",
+    "reference": "LangGraph 用图（节点+边+共享状态 State）来编排，天然支持循环、条件分支、人类介入(human-in-the-loop)和持久化检查点(checkpointer)，适合构建有多步决策、可回退、可恢复的有状态 Agent，而传统线性 Chain 难以表达循环与复杂控制流。",
+    "context": "LangGraph 的状态在节点间流转，可被 checkpointer 持久化。"
+  },
+  {
+    "question": "RAG 中常说的 chunk（文本分块）为什么需要设置 overlap（重叠）？",
+    "reference": "分块时设置 overlap 是为了避免把语义连贯的句子从中间切断导致上下文丢失；相邻 chunk 之间保留一段重叠文本，可以让跨边界的信息在至少一个 chunk 中保持完整，提升召回的相关性与答案连贯性。",
+    "context": "RecursiveCharacterTextSplitter 的 chunk_overlap 参数控制重叠长度。"
+  },
+  {
+    "question": "什么是 LLM-as-a-Judge？做评测时为什么常把温度设为 0？",
+    "reference": "LLM-as-a-Judge 指用一个（通常更强或独立的）大模型充当裁判，对被测系统的输出按给定标准打分或比较。把温度设为 0 是为了让裁判输出尽量确定、可复现，减少随机性带来的评分波动，便于对比不同版本的系统。",
+    "context": "评测追求可复现，裁判模型通常使用 temperature=0。"
+  },
+  {
+    "question": "Prompt 工程里的 Few-shot（少样本）提示是什么意思？",
+    "reference": "Few-shot 提示指在 Prompt 中给出少量「输入->输出」示例，让模型通过类比学到任务的格式与风格，再处理真正的新输入；相比 Zero-shot（不给示例）通常能显著提升格式遵循度和任务准确率。",
+    "context": "Few-shot 通过示例进行上下文学习(in-context learning)。"
+  },
+  {
+    "question": "在 LangChain 中，Retriever 和 VectorStore 是什么关系？",
+    "reference": "VectorStore 是底层向量存储（如 Chroma/FAISS），负责存向量和做相似度搜索；Retriever 是统一的检索接口（Runnable），VectorStore 可通过 as_retriever() 转成 Retriever。Retriever 是更抽象的概念，除了向量检索还能包含 MultiQuery、Rerank 等策略。",
+    "context": "vectorstore.as_retriever() 可把向量库包装成标准 Retriever。"
+  }
+]

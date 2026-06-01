@@ -72,6 +72,11 @@
   - [`vLLM` / `Ollama`：本地大模型服务部署](stage06/06-06_local_llm.md)
   - [项目 8：LangServe 企业 API 服务平台](stage06/project08_enterprise_api.md)
 
-- **🎓 Capstone：毕业综合项目**
-  - [企业智能客服 Agent：方案与架构](capstone/capstone_overview.md)
-  - [实现详解：RAG + 工具 + 多 Agent + 记忆 + 部署](capstone/capstone_implementation.md)
+- **🔥 进阶实战项目（贴近真实岗位）**
+  - [NL2SQL 数据问答 Agent：接真实数据库 + 只读护栏](advanced/nl2sql_agent.md)
+  - [Agent 自动化评测系统：多维 LLM-Judge + 报告](advanced/agent_eval_system.md)
+  - [深度研究 Agent：规划→联网检索→带引用综述](advanced/research_agent.md)
+
+- **🎓 Capstone：全栈毕业大项目**
+  - [全栈智能客服 Agent：方案与架构](capstone/capstone_overview.md)
+  - [实现详解：多 Agent + RAG + HITL + 记忆 + 前端 + 部署](capstone/capstone_implementation.md)

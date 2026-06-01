@@ -57,10 +57,17 @@
 - [x] 新增 **Capstone 毕业项目**：企业智能客服 Agent（融合全部六大能力）
 - [x] 全面铺开 Stage 2–6 文档、可运行代码与 8+1 个实战项目
 
+## 🆙 进阶加厚（2026-06-01 第二轮）
+
+- [x] 新增 3 个**进阶实战项目**（`projects_advanced/`）：NL2SQL 数据问答 Agent（接真实 SQLite + 只读护栏 + 错误自愈）、Agent 自动化评测系统（多维 LLM-Judge + 报告）、深度研究 Agent（规划→联网检索→带引用综述）
+- [x] **Capstone 升级为 v2 全栈版**（`capstone/`）：backend(多 Agent 图 + 退款 HITL + SqliteSaver 持久化) + frontend(原生 JS 聊天界面 + 审批按钮) + eval(评测看板) + Dockerfile/docker-compose
+- [x] 导航(_sidebar/SUMMARY)、README、roadmap 同步；全量 py_compile 通过、零死链
+
 ## 🚀 下一步行动（Next Step）
 
 - 按 `docs/roadmap.md` 的能力自检清单逐条打勾
-- 进入 **Stage 2 · RAG 全链路**，先跑 `stage02_rag/01_minimal_rag.py`
+- 入门：`stage02_rag/01_minimal_rag.py`；进阶：`projects_advanced/nl2sql_agent/`
+- 毕业大项目：`python capstone/backend/api.py` → 浏览器 `http://127.0.0.1:8000/`
 
 ---
 
