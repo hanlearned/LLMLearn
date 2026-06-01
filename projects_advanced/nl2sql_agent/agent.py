@@ -208,12 +208,37 @@ def ask(agent, question: str) -> None:
     print(f"🤖 {result['messages'][-1].content}")
 
 
-if __name__ == "__main__":
-    agent = build_agent()
+DEMO_QUESTIONS = [
+    "哪个城市的客户最多？",
+    "销售额最高的商品是什么？卖了多少钱？",
+    "2024 年第一季度（1-3 月）的订单总额是多少？",
+    "哪位客户的累计消费金额最高？",
+    "各品类的销售额分别是多少？从高到低排。",
+]
 
-    # 4-5 个自然语言问题演示：覆盖分组计数、销售额排序、按月聚合、跨表关联
-    ask(agent, "哪个城市的客户最多？")
-    ask(agent, "销售额最高的商品是什么？卖了多少钱？")
-    ask(agent, "2024 年 3 月的订单总额是多少？")
-    ask(agent, "哪位客户的累计消费金额最高？")
-    ask(agent, "数码配件这个品类一共卖出了多少件？")
+
+def main():
+    import sys
+
+    agent = build_agent()
+    # 带 --demo 或无参时跑演示；带 --chat 进入交互式问答
+    if "--chat" in sys.argv:
+        print("NL2SQL 交互模式（输入问题，q 退出）。例如：哪个城市客户最多？")
+        while True:
+            try:
+                q = input("\n你问：").strip()
+            except (EOFError, KeyboardInterrupt):
+                break
+            if q.lower() in {"q", "quit", "exit"}:
+                break
+            if q:
+                ask(agent, q)
+    else:
+        # 演示：覆盖分组计数、销售额排序、季度聚合、跨表关联、分组排序
+        for q in DEMO_QUESTIONS:
+            ask(agent, q)
+        print("\n💡 想自己提问？运行：python projects_advanced/nl2sql_agent/agent.py --chat")
+
+
+if __name__ == "__main__":
+    main()

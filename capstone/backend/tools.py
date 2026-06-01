@@ -9,6 +9,8 @@ _ORDERS = {
     "10001": {"item": "蓝牙耳机", "amount": 299, "status": "已签收", "logistics": "顺丰 SF123456，已签收"},
     "10002": {"item": "定制马克杯", "amount": 89, "status": "待发货", "logistics": "暂无"},
     "10003": {"item": "机械键盘", "amount": 459, "status": "运输中", "logistics": "中通 ZT987654，预计后天送达"},
+    "10004": {"item": "羊毛围巾", "amount": 199, "status": "已签收", "logistics": "京东 JD555888，已签收"},
+    "10005": {"item": "空气炸锅", "amount": 399, "status": "已退款", "logistics": "已退货入库"},
 }
 
 

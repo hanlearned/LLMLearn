@@ -41,6 +41,16 @@ def load_and_split():
 
 def main():
     chunks = load_and_split()
+
+    # 幂等重建：Chroma.from_documents 会「追加」到已有集合，所以重复跑 ingest 会让向量翻倍。
+    # 先删掉旧的持久化目录，保证每次 ingest 都是干净重建，结果可复现。
+    import os
+    import shutil
+
+    if os.path.isdir(config.PERSIST_DIR):
+        shutil.rmtree(config.PERSIST_DIR)
+        print(f"已清理旧向量库：{config.PERSIST_DIR}")
+
     # persist_directory 一传，Chroma 就会把向量落盘，下次可直接加载
     Chroma.from_documents(
         documents=chunks,
@@ -48,7 +58,7 @@ def main():
         collection_name=config.COLLECTION_NAME,
         persist_directory=config.PERSIST_DIR,
     )
-    print(f"✅ 向量库已持久化到 {config.PERSIST_DIR}")
+    print(f"✅ 向量库已持久化到 {config.PERSIST_DIR}（{len(chunks)} 个向量）")
 
 
 if __name__ == "__main__":

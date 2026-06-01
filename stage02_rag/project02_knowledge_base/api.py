@@ -14,6 +14,8 @@
     POST /chat   body: {"question": "..."}   ->  {"answer": "...", "sources": [...]}
 """
 
+from contextlib import asynccontextmanager
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -23,16 +25,22 @@ from pydantic import BaseModel, Field
 
 import qa  # noqa: E402  复用 qa.py 里的业务逻辑
 
-app = FastAPI(title="云启企业知识库 API", description="Stage 2 项目 2 · RAG 问答服务")
-
 # 在应用启动时把 RAG 链建好并常驻内存，避免每次请求都重建（重要的性能习惯）
 _chain = None
 
 
-@app.on_event("startup")
-def _startup():
+@asynccontextmanager
+async def lifespan(app: "FastAPI"):
     global _chain
     _chain = qa.build_chain()
+    yield
+
+
+app = FastAPI(
+    title="云启企业知识库 API",
+    description="Stage 2 项目 2 · RAG 问答服务",
+    lifespan=lifespan,
+)
 
 
 class ChatRequest(BaseModel):

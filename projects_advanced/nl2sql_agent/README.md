@@ -8,10 +8,12 @@
 
 ## 核心看点
 
-1. **只读护栏**：`run_sql` 只放行 `SELECT`/`WITH`，任何 `INSERT/UPDATE/DELETE/DROP/ALTER/CREATE`
-   等写操作一律拒绝。这是「让模型直连数据库」从危险变可控的关键。
+1. **只读护栏（三层防御）**：① 拒绝多语句（防 `SELECT 1; DROP...` 拖尾注入）；② 必须 `SELECT`/`WITH`
+   开头；③ 用**只读连接**（`mode=ro`）执行，任何写操作在 SQLite 层直接失败。比纯关键字黑名单更可靠
+   （也不会误杀 `REPLACE()` 等只读函数）。
 2. **错误自愈**：SQL 写错时，把数据库的真实报错原样回传给模型，它能据此重写 SQL 再试。
 3. **结果截断**：单次查询最多返回 50 行，避免 `SELECT *` 把上万行塞进上下文。
+4. **有测试**：`tests/test_nl2sql.py` 参数化覆盖护栏放行/拒绝、只读连接兜底、schema、真实聚合。
 
 ## 文件说明
 
@@ -27,11 +29,14 @@
 ```bash
 # 1. 在仓库根目录的 .env 里填好任意一个厂商的 API Key（见 .env.example）
 
-# 2. 先建库（生成 shop.db）
+# 2. 先建库（生成 shop.db：15 客户 / 12 商品 / 37 订单，覆盖全年 12 个月、5 个品类）
 python projects_advanced/nl2sql_agent/seed_db.py
 
-# 3. 再运行 Agent（会演示 5 个自然语言问题）
+# 3a. 演示模式（自动跑 5 个自然语言问题）
 python projects_advanced/nl2sql_agent/agent.py
+
+# 3b. 交互模式（自己提问）
+python projects_advanced/nl2sql_agent/agent.py --chat
 ```
 
 运行 `agent.py` 后，每个问题都会打印 **工具调用轨迹**（调了哪些工具、传了什么参数、
