@@ -1,6 +1,8 @@
 # learn_llm —— LangChain & LLM 应用开发系统学习路线
 
-> 本仓库用于系统学习 LangChain 框架与 LLM 应用开发。所有学习过程中产生的代码、笔记、示例和项目都将存放于此。
+> 本仓库用于系统学习 LangChain 框架与 LLM 应用开发，**目标是达到 Agent 开发工程师水平**。所有学习过程中产生的代码、笔记、示例和项目都将存放于此。
+
+> 🎯 **先读这个**：[总纲 · 从 0 到 Agent 开发工程师](docs/roadmap.md) —— 讲清为什么这样学、学完能干什么、怎么验证自己到了（含能力自检清单）。
 
 ---
 
@@ -23,6 +25,9 @@
 | **Stage 4** | LangGraph 多 Agent 工作流 | StateGraph、MemorySaver、Human-in-the-loop、Supervisor | 项目 5：多 Agent 内容创作工作流<br>项目 6：AI 招聘助手（MCP + RAG + Agent） |
 | **Stage 5** | Prompt 工程与 LLMOps | CoT、ToT、Prompt Hub、LLM-as-a-Judge | 项目 7：Prompt 评估与 A/B 测试平台 |
 | **Stage 6** | 工程化部署与性能优化 | FastAPI、LCEL、StreamingResponse、Docker、vLLM / Ollama | 项目 8：LangServe 企业 API 服务平台 |
+| **🎓 Capstone** | 毕业综合项目 | RAG + 工具 + 多 Agent + 记忆 + 部署 一体化 | 企业智能客服 Agent（对标岗位要求） |
+
+> **本路线相比通用教程的三处刻意取舍**：① Agent 一律用 **LangGraph** 实现，`AgentExecutor` 只讲原理不依赖（它已软弃用）；② **评测/可观测** 从 Stage 2 就渗透，不是放到最后；③ **工程化（FastAPI）** 从项目 2 起每个项目都带一层，而非攒到结尾。详见 [总纲](docs/roadmap.md)。
 
 ---
 
@@ -61,22 +66,30 @@ learn_llm/
 # 进入项目目录
 cd learn_llm
 
-# 激活虚拟环境（Windows PowerShell）
-.\venv\Scripts\Activate.ps1
+# 创建并激活虚拟环境
+python -m venv venv
+source venv/bin/activate          # Linux/macOS
+# .\venv\Scripts\Activate.ps1     # Windows PowerShell
 
-# 核心依赖列表
-# langchain, langchain-openai, langchain-community, openai, python-dotenv
+# 一键安装全阶段依赖
+pip install -r requirements.txt
 ```
+
+> 依赖按 Stage 分组写在 `requirements.txt` 中，前期阶段不装后期重依赖也能跑。
 
 ### 2. 配置 API Key
 
-在项目根目录创建 `.env` 文件：
+复制 `.env.example` 为 `.env`，填入**任意一个**厂商的 Key 即可（代码会自动探测）：
 
 ```env
-DEEPSEEK_API_KEY=sk-xxxxxxxx
+# 四选一即可（推荐 SiliconFlow，注册送额度且支持 Embedding/Reranker）
+SILICONFLOW_API_KEY=sk-xxxxxxxx
+# DEEPSEEK_API_KEY=sk-xxxxxxxx
+# MOONSHOT_API_KEY=sk-xxxxxxxx
+# OPENAI_API_KEY=sk-xxxxxxxx
 ```
 
-> 注册地址：[https://platform.deepseek.com/](https://platform.deepseek.com/)，新用户送 10 元额度，足够学完整个课程。
+> 推荐 [SiliconFlow 硅基流动](https://cloud.siliconflow.cn/)：注册送额度，同时提供对话模型与 `BGE` Embedding/Reranker，RAG 阶段不用在本地下几个 G 的模型。DeepSeek 亦可（[注册地址](https://platform.deepseek.com/)，新用户送额度），但 DeepSeek 无 Embedding 接口，RAG 阶段需另配。
 
 ### 3. 运行第一个示例
 

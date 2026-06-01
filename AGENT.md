@@ -47,14 +47,20 @@
 
 ---
 
+## 🆙 路线升级（2026-06-01）
+
+为达成「Agent 开发工程师水平」的目标，对课程做了一次结构性升级：
+- [x] 新增 **总纲文档** `docs/roadmap.md`：岗位能力画像、设计取舍、**能力自检清单**
+- [x] 升级基建：根级 `common/` 共享包（多厂商 LLM 自动探测 + Embedding 选型）、`requirements.txt`
+- [x] **Agent 全部改用 LangGraph 实现**，`AgentExecutor` 仅讲原理（已软弃用）
+- [x] **评测/可观测前置**：Stage 2 新增 `02-12_rag_evaluation.md`，贯穿全程
+- [x] 新增 **Capstone 毕业项目**：企业智能客服 Agent（融合全部六大能力）
+- [x] 全面铺开 Stage 2–6 文档、可运行代码与 8+1 个实战项目
+
 ## 🚀 下一步行动（Next Step）
 
-### 继续补 Stage 1 剩余基础
-- `StrOutputParser` / `JsonOutputParser`：独立文档
-- `LangSmithCallbackHandler`：调用链路追踪
-
-### 或进入 Stage 2
-- 完成 Stage 1 后，进入 **RAG 系统深度开发**
+- 按 `docs/roadmap.md` 的能力自检清单逐条打勾
+- 进入 **Stage 2 · RAG 全链路**，先跑 `stage02_rag/01_minimal_rag.py`
 
 ---
 

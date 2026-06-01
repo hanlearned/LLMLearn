@@ -1,4 +1,5 @@
 - [首页](/)
+- [🎯 总纲：从 0 到 Agent 开发工程师](roadmap.md)
 
 - **Stage 1：LangChain 核心基础**
   - [`ChatOpenAI`：配置与调用大模型](stage01/01-01_chatopenai.md)
@@ -26,6 +27,7 @@
   - [`create_retrieval_chain`：组装检索增强生成链](stage02/02-09_retrieval_chain.md)
   - [`MultiQueryRetriever` / RAG-Fusion：查询扩展与重排](stage02/02-10_multiquery_ragfusion.md)
   - [Re-rank：`CrossEncoder` 与 `BGE-Reranker` 结果精排](stage02/02-11_rerank.md)
+  - [RAG 评测：召回率、忠实度与答案相关性量化](stage02/02-12_rag_evaluation.md)
   - [项目 2：企业级智能知识库问答系统](stage02/project02_knowledge_base.md)
   - [项目 3：GraphRAG 原型系统](stage02/project03_graphrag.md)
 
@@ -39,6 +41,8 @@
   - [`create_structured_chat_agent`：结构化聊天代理](stage03/03-07_structured_chat_agent.md)
   - [`ConversationBufferMemory`：对话缓冲记忆](stage03/03-08_buffer_memory.md)
   - [`ConversationSummaryMemory`：对话摘要记忆](stage03/03-09_summary_memory.md)
+  - [⭐ LangGraph `create_react_agent`：现代 Agent 推荐写法](stage03/03-10_langgraph_react_agent.md)
+  - [Agent 执行轨迹调试：看懂它为什么调错工具](stage03/03-11_agent_trace_debug.md)
   - [项目 4：智能数据分析助手](stage03/project04_data_analysis_agent.md)
 
 - **Stage 4：LangGraph 多 Agent 工作流**
@@ -67,3 +71,7 @@
   - [`Docker`：容器化打包与部署](stage06/06-05_docker.md)
   - [`vLLM` / `Ollama`：本地大模型服务部署](stage06/06-06_local_llm.md)
   - [项目 8：LangServe 企业 API 服务平台](stage06/project08_enterprise_api.md)
+
+- **🎓 Capstone：毕业综合项目**
+  - [企业智能客服 Agent：方案与架构](capstone/capstone_overview.md)
+  - [实现详解：RAG + 工具 + 多 Agent + 记忆 + 部署](capstone/capstone_implementation.md)

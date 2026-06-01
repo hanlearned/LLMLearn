@@ -35,4 +35,6 @@
 
 ## 开始阅读
 
-👉 点击左侧目录，从 [**01-01 `ChatOpenAI`**](stage01/01-01_chatopenai.md) 开始。
+👉 **第一步先读** [🎯 总纲：从 0 到 Agent 开发工程师](roadmap.md)，建立全局地图与能力自检清单。
+
+👉 然后点击左侧目录，从 [**01-01 `ChatOpenAI`**](stage01/01-01_chatopenai.md) 开始逐篇推进。

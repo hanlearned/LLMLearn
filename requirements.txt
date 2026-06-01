@@ -1,0 +1,41 @@
+# ============================================================
+# LLMLearn 全阶段依赖清单
+# 安装：pip install -r requirements.txt
+# 说明：按 Stage 分组，前期阶段不需要装后期阶段的重依赖也能跑。
+# ============================================================
+
+# ---- Stage 1：核心基础（必装）----
+langchain>=0.3.0
+langchain-core>=0.3.0
+langchain-openai>=0.2.0
+langchain-community>=0.3.0
+python-dotenv>=1.0.0
+pydantic>=2.7.0
+
+# ---- Stage 2：RAG ----
+langchain-text-splitters>=0.3.0
+chromadb>=0.5.0              # 本地向量库（默认）
+langchain-chroma>=0.1.4    # Chroma 的现代 LangChain 集成
+faiss-cpu>=1.8.0            # 备选向量库
+tiktoken>=0.7.0            # token 计数 / 切分
+rank-bm25>=0.2.2          # 关键词检索（混合检索）
+# sentence-transformers>=3.0.0   # 本地 Embedding / Reranker（可选，体积大，按需解注释）
+pypdf>=4.0.0             # PDF 加载
+unstructured>=0.15.0   # 多格式文档加载（可选）
+
+# ---- Stage 3 / 4：Agent 与 LangGraph ----
+langgraph>=0.2.40
+langgraph-checkpoint-sqlite>=2.0.0   # SQLite 持久化（项目用）
+pandas>=2.2.0                         # 数据分析 Agent
+matplotlib>=3.8.0                    # 可视化工具（数据分析 Agent）
+duckduckgo-search>=6.0.0           # 联网搜索工具（免 key）
+
+# ---- Stage 5：评测 / PromptOps ----
+# ragas>=0.2.0          # RAG 自动评测（可选，依赖较多）
+# langsmith>=0.1.0      # 调用链追踪（可选，需 LANGSMITH key）
+
+# ---- Stage 6：部署 ----
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+sse-starlette>=2.1.0
+redis>=5.0.0            # 缓存（项目8，可选）

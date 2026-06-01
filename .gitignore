@@ -39,6 +39,14 @@ venv.bak/
 # Environment variables
 .env
 
+# Generated artifacts (vector stores / checkpoints / caches)
+chroma_db/
+*.faiss
+*.sqlite
+*.sqlite3
+.langgraph_api/
+.cache/
+
 # OS
 .DS_Store
 Thumbs.db
